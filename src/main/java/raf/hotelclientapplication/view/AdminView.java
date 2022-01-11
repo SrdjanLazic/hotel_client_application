@@ -2,8 +2,11 @@ package raf.hotelclientapplication.view;
 
 import raf.hotelclientapplication.model.ClientRankTableModel;
 import raf.hotelclientapplication.model.ClientTableModel;
+import raf.hotelclientapplication.model.NotificationTypeTableModel;
+import raf.hotelclientapplication.restclient.NotificationServiceRestClient;
 import raf.hotelclientapplication.restclient.UserServiceRestClient;
 import raf.hotelclientapplication.restclient.dto.ClientRankListDto;
+import raf.hotelclientapplication.restclient.dto.NotificationTypeListDto;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +21,10 @@ public class AdminView extends JDialog{
      */
     private UserServiceRestClient userServiceRestClient = new UserServiceRestClient();
     private ClientRankTableModel clientRankTableModel;
+    private NotificationServiceRestClient notificationServiceRestClient = new NotificationServiceRestClient();
+    private NotificationTypeTableModel notificationTypeTableModel;
     private JTable clientRankTable;
+    private JTable notificationTypeTable;
     private JTextField banClientID = new JTextField(3);
     private JTextField unbanClientID = new JTextField(3);
     private JButton banClientButton = new JButton("Ban client");
@@ -29,6 +35,7 @@ public class AdminView extends JDialog{
     private JButton unbanManagerButton = new JButton("Unban manager");
     private JButton editCLientRank = new JButton("Edit client rank");
     private JPanel banUnbanPanel = new JPanel();
+    private JButton deleteNotificationTypeButton = new JButton("Delete notification type");
     private JDialog adminView;
 
 
@@ -104,22 +111,43 @@ public class AdminView extends JDialog{
 
         });
 
+        notificationTypeTableModel = new NotificationTypeTableModel();
+        notificationTypeTable = new JTable(notificationTypeTableModel);
+
+        NotificationTypeListDto notificationTypeListDto = notificationServiceRestClient.getAllNotificationTypes();
+        notificationTypeListDto.getContent().forEach(notificationTypeDto -> {
+            notificationTypeTableModel.addRow(new Object[]{notificationTypeDto.getType(), notificationTypeDto.getMessage(), notificationTypeDto.getId()});
+        });
+
+        JScrollPane scrollPaneNotificationTypes = new JScrollPane(notificationTypeTable);
+        add(scrollPaneNotificationTypes);
+
+        add(deleteNotificationTypeButton);
+
+        deleteNotificationTypeButton.addActionListener(e -> {
+            Long id = notificationTypeTableModel.getNotificationTypeListDto().getContent().get(notificationTypeTable.getSelectedRow()).getId();
+            try {
+                notificationServiceRestClient.deleteNotificationType(id);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
+        });
+
 
         this.pack();
 
 
 
+        // TODO:
         //update client password - ZA SAD NE TREBA
-        //update RANK
         //get discount
         //get all notifications
         //get notifications by email
         //get notifications between dates
         //get notification by type
         //delete notification
-        //get notification types
         //update notification type
-        //get client ranks
         //get clients
         //get managers
     }
