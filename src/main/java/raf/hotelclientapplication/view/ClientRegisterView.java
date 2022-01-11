@@ -6,11 +6,12 @@ import raf.hotelclientapplication.restclient.UserServiceRestClient;
 import raf.hotelclientapplication.restclient.dto.ClientCreateDto;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class ClientRegisterView extends JFrame {
+public class ClientRegisterView extends JDialog {
     /*
     @Email
     private String email;
@@ -29,6 +30,7 @@ public class ClientRegisterView extends JFrame {
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate birthday;
      */
+
     private JLabel emailLabel = new JLabel("Email:");
     private JLabel firstNameLabel = new JLabel("First name:");
     private JLabel lastNameLabel = new JLabel("Last name:");
@@ -39,16 +41,16 @@ public class ClientRegisterView extends JFrame {
     private JLabel dayLabel = new JLabel("Day");
     private JLabel monthLabel = new JLabel("Month");
     private JLabel yearLabel = new JLabel("Year");
-    private JTextField usernameInput = new JTextField(30);
-    private JTextField emailInput = new JTextField(30);
-    private JTextField firstNameInput = new JTextField(30);
-    private JTextField lastNameInput = new JTextField(30);
-    private JPasswordField passwordInput = new JPasswordField(30);
-    private JTextField passportInput = new JTextField(30);
-    private JTextField phoneNumberInput = new JTextField(30);
-    private JTextField dayInput = new JTextField(30);
-    private JTextField monthInput = new JTextField(30);
-    private JTextField yearInput = new JTextField(30);
+    private JTextField usernameInput = new JTextField(20);
+    private JTextField emailInput = new JTextField(20);
+    private JTextField firstNameInput = new JTextField(20);
+    private JTextField lastNameInput = new JTextField(20);
+    private JPasswordField passwordInput = new JPasswordField(20);
+    private JTextField passportInput = new JTextField(20);
+    private JTextField phoneNumberInput = new JTextField(20);
+    private JTextField dayInput = new JTextField(20);
+    private JTextField monthInput = new JTextField(20);
+    private JTextField yearInput = new JTextField(20);
     private JButton registerButton = new JButton("Register");
     private UserServiceRestClient userServiceRestClient = new UserServiceRestClient();
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -58,7 +60,6 @@ public class ClientRegisterView extends JFrame {
         this.setTitle("Client Application");
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
-        // TODO: modality
 
         JPanel registerPanel = new JPanel();
         registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.Y_AXIS));
@@ -84,6 +85,7 @@ public class ClientRegisterView extends JFrame {
         registerPanel.add(monthInput);
         registerPanel.add(yearLabel);
         registerPanel.add(yearInput);
+        registerPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         registerPanel.add(registerButton);
         registerButton.addActionListener(e -> {
             ClientCreateDto clientCreateDto = new ClientCreateDto();
@@ -101,10 +103,12 @@ public class ClientRegisterView extends JFrame {
             } catch (IOException jsonProcessingException) {
                 jsonProcessingException.printStackTrace();
             }
+            this.setVisible(false);
         });
 
         this.add(registerPanel);
         this.pack();
+        this.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         this.setVisible(true);
 
 

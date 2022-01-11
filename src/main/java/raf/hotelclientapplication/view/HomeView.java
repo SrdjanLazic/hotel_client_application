@@ -31,17 +31,18 @@ public class HomeView extends JPanel {
     public HomeView(){
         super();
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(50, 30, 50, 30));
 
         usernameLabel = new JLabel("Email: ");
         passwordLabel = new JLabel("Password: ");
-        usernameInput = new JTextField(20);
-        passwordInput = new JPasswordField(20);
+        usernameInput = new JTextField(10);
+        passwordInput = new JPasswordField(10);
         loginButton = new JButton("Login");
         clientRegister = new JButton("Register client");
         managerRegister = new JButton("Register manager");
 
+        //INPUT PANEL
         rolePanel = new JPanel();
         adminButton = new JRadioButton("Admin");
         adminButton.setSelected(true);
@@ -61,13 +62,14 @@ public class HomeView extends JPanel {
 
         inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
-        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 50, 30));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 50, 30));
         inputPanel.add(usernameLabel);
         inputPanel.add(usernameInput);
         inputPanel.add(passwordLabel);
         inputPanel.add(passwordInput);
+        inputPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        loginButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         inputPanel.add(loginButton);
-        loginButton.setAlignmentX(CENTER_ALIGNMENT);
         loginButton.addActionListener(e -> {
             String role = group.getSelection().getActionCommand();
             String email = usernameInput.getText();
@@ -88,16 +90,20 @@ public class HomeView extends JPanel {
         });
         this.add(inputPanel);
 
+        //BUTTON PANEL
         buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(clientRegister);
         clientRegister.setAlignmentX(CENTER_ALIGNMENT);
         clientRegister.addActionListener(e -> {
-            // otvori novi prozor za popunjavanje polja
             new ClientRegisterView();
         });
+        buttonPanel.add(Box.createRigidArea(new Dimension(20, 0)));
         buttonPanel.add(managerRegister);
+        managerRegister.addActionListener( e -> {
+            new ManagerRegisterView();
+        });
         managerRegister.setAlignmentX(CENTER_ALIGNMENT);
         this.add(buttonPanel);
     }
