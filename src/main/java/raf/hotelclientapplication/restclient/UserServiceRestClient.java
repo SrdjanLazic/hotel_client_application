@@ -42,7 +42,6 @@ public class UserServiceRestClient {
         if (response.code() == 200) {
             String json = response.body().string();
             TokenResponseDto dto = objectMapper.readValue(json, TokenResponseDto.class);
-
             return dto.getToken();
         }
 
@@ -178,7 +177,7 @@ public class UserServiceRestClient {
 
     public ClientRankListDto getClientRanks() throws IOException {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+        System.out.println(HotelClientApplication.getInstance().getToken());
         Request request = new Request.Builder()
                 .url(URL + "/clientrank")
                 .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
@@ -188,7 +187,7 @@ public class UserServiceRestClient {
         Call call = client.newCall(request);
 
         Response response = call.execute();
-
+        System.out.println(response.code());
         if (response.code() == 200) {
             String json = response.body().string();
 

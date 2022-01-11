@@ -2,7 +2,7 @@ package raf.hotelclientapplication.view;
 
 import javax.swing.*;
 
-public class ClientView extends JFrame {
+public class ClientView extends JDialog {
 
     ClientView() {
 //        JFrame frame = new AdminView();

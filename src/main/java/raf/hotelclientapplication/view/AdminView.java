@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class AdminView extends JFrame{
+public class AdminView extends JDialog{
 
     /*
         private Integer minNumberOfReservations;
@@ -29,12 +29,14 @@ public class AdminView extends JFrame{
     private JButton unbanManagerButton = new JButton("Unban manager");
     private JButton editCLientRank = new JButton("Edit client rank");
     private JPanel banUnbanPanel = new JPanel();
+    private JDialog adminView;
 
 
     public AdminView() throws NoSuchMethodException, IllegalAccessException, IOException {
+        adminView = this;
         this.setTitle("ADMIN");
+        this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout());
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
 //        clientTableModel = new ClientTableModel();
 //        clientTable = new JTable(clientTableModel);
@@ -98,10 +100,9 @@ public class AdminView extends JFrame{
 
         editCLientRank.addActionListener(e -> {
             String clientRankName = clientRankTableModel.getClientRankListDto().getContent().get(clientRankTable.getSelectedRow()).getName();
-            new ClientRankUpdateView(clientRankName);
+            new ClientRankUpdateView(clientRankName, adminView);
 
         });
-
 
 
         this.pack();
