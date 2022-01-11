@@ -42,17 +42,6 @@ public class HomeView extends JPanel {
         clientRegister = new JButton("Register client");
         managerRegister = new JButton("Register manager");
 
-        // TODO: ukloniti posle:
-        JButton test = new JButton("TEST");
-        add(test);
-        test.addActionListener(e -> {
-            try {
-                new AdminView();
-            } catch (NoSuchMethodException | IllegalAccessException | IOException noSuchMethodException) {
-                noSuchMethodException.printStackTrace();
-            }
-        });
-
         //INPUT PANEL
         rolePanel = new JPanel();
         adminButton = new JRadioButton("Admin");

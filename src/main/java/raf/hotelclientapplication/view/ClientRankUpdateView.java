@@ -21,7 +21,6 @@ public class ClientRankUpdateView extends JFrame {
     public ClientRankUpdateView(String name){
         this.setTitle("Client rank update");
         this.setLayout(new FlowLayout());
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         clientRankName = new JLabel("Currently editing: " + name);
         add(clientRankName);
