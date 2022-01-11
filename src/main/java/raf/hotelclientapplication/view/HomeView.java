@@ -85,7 +85,6 @@ public class HomeView extends JPanel {
 
                 if(role.equals("admin")){
                     new AdminView();
-                    this.getParent().setVisible(false);
                 }
 
             } catch (IOException | IllegalAccessException | NoSuchMethodException ioException) {
