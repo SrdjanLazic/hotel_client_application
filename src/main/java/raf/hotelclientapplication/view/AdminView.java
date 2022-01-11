@@ -36,12 +36,14 @@ public class AdminView extends JDialog{
     private JButton editCLientRank = new JButton("Edit client rank");
     private JPanel banUnbanPanel = new JPanel();
     private JButton deleteNotificationTypeButton = new JButton("Delete notification type");
+    private JButton updateNotificationTypeButton = new JButton("Update notification type");
     private JDialog adminView;
 
 
     public AdminView() throws NoSuchMethodException, IllegalAccessException, IOException {
         adminView = this;
         this.setTitle("ADMIN");
+        this.setSize(800,600);
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout());
         this.setVisible(true);
@@ -133,6 +135,14 @@ public class AdminView extends JDialog{
             }
 
         });
+
+        add(updateNotificationTypeButton);
+
+        updateNotificationTypeButton.addActionListener( e -> {
+            Long id = notificationTypeTableModel.getNotificationTypeListDto().getContent().get(notificationTypeTable.getSelectedRow()).getId();
+            new NotificationTypeUpdateView(id, adminView);
+        });
+
 
 
         this.pack();

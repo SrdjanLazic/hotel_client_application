@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import raf.hotelclientapplication.HotelClientApplication;
-import raf.hotelclientapplication.restclient.dto.ClientRankListDto;
-import raf.hotelclientapplication.restclient.dto.NotificationTypeListDto;
+import raf.hotelclientapplication.restclient.dto.*;
 
 import java.io.IOException;
 
@@ -58,5 +57,31 @@ public class NotificationServiceRestClient {
         } else {
             throw new RuntimeException();
         }
+    }
+
+    public NotificationTypeDto updateNotificationType(String message, Long id) throws IOException {
+
+        NotificationTypeUpdateDto notificationTypeUpdateDto = new NotificationTypeUpdateDto();
+        notificationTypeUpdateDto.setMessage(message);
+        RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(notificationTypeUpdateDto));
+
+        Request request = new Request.Builder()
+                .url(URL + "/notification-type/" + id + "/update")
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .put(body)
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, NotificationTypeDto.class);
+        }
+
+        throw new RuntimeException();
+
     }
 }

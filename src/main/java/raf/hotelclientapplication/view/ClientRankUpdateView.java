@@ -23,6 +23,7 @@ public class ClientRankUpdateView extends JDialog {
     public ClientRankUpdateView(String name, JDialog adminView){
         parentView = adminView;
         this.setTitle("Client rank update");
+        this.setSize(300,200);
         this.setLocationRelativeTo(null);
         this.setLayout(new FlowLayout());
         this.setVisible(true);
