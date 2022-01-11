@@ -1,11 +1,12 @@
 package raf.hotelclientapplication.view;
 
 import raf.hotelclientapplication.model.ClientRankTableModel;
-import raf.hotelclientapplication.model.ClientTableModel;
+import raf.hotelclientapplication.model.NotificationTableModel;
 import raf.hotelclientapplication.model.NotificationTypeTableModel;
 import raf.hotelclientapplication.restclient.NotificationServiceRestClient;
 import raf.hotelclientapplication.restclient.UserServiceRestClient;
 import raf.hotelclientapplication.restclient.dto.ClientRankListDto;
+import raf.hotelclientapplication.restclient.dto.NotificationListDto;
 import raf.hotelclientapplication.restclient.dto.NotificationTypeListDto;
 
 import javax.swing.*;
@@ -25,6 +26,8 @@ public class AdminView extends JDialog{
     private NotificationTypeTableModel notificationTypeTableModel;
     private JTable clientRankTable;
     private JTable notificationTypeTable;
+    private JTable notificationTable;
+    private NotificationTableModel notificationTableModel;
     private JTextField banClientID = new JTextField(3);
     private JTextField unbanClientID = new JTextField(3);
     private JButton banClientButton = new JButton("Ban client");
@@ -37,7 +40,14 @@ public class AdminView extends JDialog{
     private JPanel banUnbanPanel = new JPanel();
     private JButton deleteNotificationTypeButton = new JButton("Delete notification type");
     private JDialog adminView;
-
+    private JTextField filterByEmailInput = new JTextField(15);
+    private JButton filterByEmailButton = new JButton("Filter by email");
+    private JTextField filterByTypeInput = new JTextField(15);
+    private JButton filterByTypeButton = new JButton("Filter by type");
+    private JTextField filterByDate1 = new JTextField(15);
+    private JTextField filterByDate2 = new JTextField(15);
+    private JButton filterByDatesButton = new JButton("Filter by dates");
+    private JButton resetFilterButton = new JButton("Reset filter");
 
     public AdminView() throws NoSuchMethodException, IllegalAccessException, IOException {
         adminView = this;
@@ -134,22 +144,83 @@ public class AdminView extends JDialog{
 
         });
 
+        notificationTableModel = new NotificationTableModel();
+        notificationTable = new JTable(notificationTableModel);
+
+        NotificationListDto notificationListDto = notificationServiceRestClient.getAllNotifications();
+        notificationListDto.getContent().forEach(notificationDto -> {
+            notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
+        });
+
+        JScrollPane notificationsScrollPanel = new JScrollPane(notificationTable);
+        add(notificationsScrollPanel);
+
+        add(filterByEmailInput);
+        add(filterByEmailButton);
+        filterByEmailButton.addActionListener(e -> {
+            String email = filterByEmailInput.getText();
+            try {
+                NotificationListDto filteredNotifications = notificationServiceRestClient.getNotificationsByEmail(email);
+                notificationTableModel.setRowCount(0);
+                filteredNotifications.getContent().forEach(notificationDto -> {
+                    notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
+                });
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+
+        add(filterByTypeInput);
+        add(filterByTypeButton);
+        filterByTypeButton.addActionListener(e -> {
+            String type = filterByTypeInput.getText();
+            try {
+                NotificationListDto filteredNotifications = notificationServiceRestClient.getNotificationsByType(type);
+                notificationTableModel.setRowCount(0);
+                filteredNotifications.getContent().forEach(notificationDto -> {
+                    notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
+                });
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+
+        add(filterByDate1);
+        add(filterByDate2);
+        add(filterByDatesButton);
+        filterByDatesButton.addActionListener(e -> {
+            String date1 = filterByDate1.getText();
+            String date2 = filterByDate2.getText();
+            try {
+                NotificationListDto filteredNotifications = notificationServiceRestClient.getNotificationsByDate(date1, date2);
+                notificationTableModel.setRowCount(0);
+                filteredNotifications.getContent().forEach(notificationDto -> {
+                    notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
+                });
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+
+        add(resetFilterButton);
+        resetFilterButton.addActionListener(e -> {
+            notificationTableModel.setRowCount(0);
+            notificationListDto.getContent().forEach(notificationDto -> {
+                notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
+            });
+        });
+
 
         this.pack();
 
 
 
         // TODO:
-        //update client password - ZA SAD NE TREBA
-        //get discount
-        //get all notifications
-        //get notifications by email
-        //get notifications between dates
-        //get notification by type
-        //delete notification
-        //update notification type
-        //get clients
-        //get managers
+        //filter notifications between dates
+        //filter notification by type
     }
 
 }
