@@ -42,6 +42,17 @@ public class HomeView extends JPanel {
         clientRegister = new JButton("Register client");
         managerRegister = new JButton("Register manager");
 
+        // TODO: ukloniti posle:
+        JButton test = new JButton("TEST");
+        add(test);
+        test.addActionListener(e -> {
+            try {
+                new AdminView();
+            } catch (NoSuchMethodException | IllegalAccessException | IOException noSuchMethodException) {
+                noSuchMethodException.printStackTrace();
+            }
+        });
+
         //INPUT PANEL
         rolePanel = new JPanel();
         adminButton = new JRadioButton("Admin");
@@ -83,8 +94,18 @@ public class HomeView extends JPanel {
                 System.out.println(HotelClientApplication.getInstance().getUser());
                 HotelClientApplication.getInstance().setToken(token);
 
-            } catch (IOException ioException) {
+                if(role.equals("admin")){
+                    new AdminView();
+                }
+
+            } catch (IOException | IllegalAccessException | NoSuchMethodException ioException) {
                 ioException.printStackTrace();
+
+            } catch (RuntimeException runtimeException){
+                JOptionPane.showMessageDialog(this,
+                        "Error logging in.",
+                        "Login error",
+                        JOptionPane.ERROR_MESSAGE);
             }
 
         });

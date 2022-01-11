@@ -1,24 +1,114 @@
 package raf.hotelclientapplication.view;
 
+import raf.hotelclientapplication.model.ClientRankTableModel;
+import raf.hotelclientapplication.model.ClientTableModel;
+import raf.hotelclientapplication.restclient.UserServiceRestClient;
+import raf.hotelclientapplication.restclient.dto.ClientRankListDto;
+
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
 
 public class AdminView extends JFrame{
 
-    AdminView() {
-        JFrame frame = new AdminView();
-        frame.setTitle("ADMIN");
-        frame.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,300);
-        JButton button1 = new JButton("Press");
-        frame.getContentPane().add(button1);
-        frame.setVisible(true);
+    /*
+        private Integer minNumberOfReservations;
+        private Integer maxNumberOfReservations;
+        private Double discount;
+     */
+    private UserServiceRestClient userServiceRestClient = new UserServiceRestClient();
+    private ClientRankTableModel clientRankTableModel;
+    private JTable clientRankTable;
+    private JTextField banClientID = new JTextField(3);
+    private JTextField unbanClientID = new JTextField(3);
+    private JButton banClientButton = new JButton("Ban client");
+    private JButton unbanClientButton = new JButton("Unban client");
+    private JTextField banManagerID = new JTextField(3);
+    private JTextField unbanManagerID = new JTextField(3);
+    private JButton banManagerButton = new JButton("Ban manager");
+    private JButton unbanManagerButton = new JButton("Unban manager");
+    private JButton editCLientRank = new JButton("Edit client rank");
+    private JPanel banUnbanPanel = new JPanel();
 
-        //ban
-        //unban
-        //update profile - bespotrebno za admina mozda?
-        //update client password
-        //change password - bespotrebno za admina mozda?
+
+    public AdminView() throws NoSuchMethodException, IllegalAccessException, IOException {
+        this.setTitle("ADMIN");
+        this.setLayout(new FlowLayout());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+//        clientTableModel = new ClientTableModel();
+//        clientTable = new JTable(clientTableModel);
+        banUnbanPanel.add(banClientID);
+        banUnbanPanel.add(banClientButton);
+        banClientButton.addActionListener(e -> {
+            Long id = Long.parseLong(banClientID.getText());
+            try {
+                userServiceRestClient.banClient(id);
+                banClientID.setText("");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        banUnbanPanel.add(unbanClientID);
+        banUnbanPanel.add(unbanClientButton);
+        unbanClientButton.addActionListener(e -> {
+            Long id = Long.parseLong(unbanClientID.getText());
+            try {
+                userServiceRestClient.unbanClient(id);
+                unbanClientID.setText("");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        banUnbanPanel.add(banManagerID);
+        banUnbanPanel.add(banManagerButton);
+        banManagerButton.addActionListener(e -> {
+            Long id = Long.parseLong(banManagerID.getText());
+            try {
+                userServiceRestClient.banManager(id);
+                banManagerID.setText("");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        banUnbanPanel.add(unbanManagerID);
+        banUnbanPanel.add(unbanManagerButton);
+        unbanManagerButton.addActionListener(e -> {
+            Long id = Long.parseLong(unbanManagerID.getText());
+            try {
+                userServiceRestClient.unbanManager(id);
+                unbanManagerID.setText("");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        add(banUnbanPanel);
+
+
+        clientRankTableModel = new ClientRankTableModel();
+        clientRankTable = new JTable(clientRankTableModel);
+
+        ClientRankListDto clientRankListDto = userServiceRestClient.getClientRanks();
+        clientRankListDto.getContent().forEach(clientRankDto -> {
+            clientRankTableModel.addRow(new Object[]{clientRankDto.getName(), clientRankDto.getMinNumberOfReservations(), clientRankDto.getMaxNumberOfReservations(), clientRankDto.getDiscount()});
+        });
+        JScrollPane scrollPane = new JScrollPane(clientRankTable);
+        add(scrollPane);
+        add(editCLientRank);
+
+        editCLientRank.addActionListener(e -> {
+            String clientRankName = clientRankTableModel.getClientRankListDto().getContent().get(clientRankTable.getSelectedRow()).getName();
+            new ClientRankUpdateView(clientRankName);
+
+        });
+
+
+
+        this.pack();
+
+
+
+        //update client password - ZA SAD NE TREBA
         //update RANK
         //get discount
         //get all notifications
