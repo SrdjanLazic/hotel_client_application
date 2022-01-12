@@ -11,7 +11,7 @@ public class NotificationTypeUpdateView extends JDialog{
 
     private JLabel notificationTypeName;
     private JLabel messageLabel = new JLabel("Message:");
-    private JTextArea messageArea = new JTextArea(5,10);
+    private JTextField messageArea = new JTextField(10);
     private JButton messageButton = new JButton("Update");
     private NotificationServiceRestClient notificationServiceRestClient = new NotificationServiceRestClient();
     private JDialog parentView;
@@ -21,14 +21,17 @@ public class NotificationTypeUpdateView extends JDialog{
         parentView = adminView;
         this.setTitle("Client rank update");
         this.setSize(400,200);
-        this.setLocationRelativeTo(null);
-        this.setLayout(new FlowLayout());
-        this.setVisible(true);
+        JPanel messageSpace = new JPanel();
+        messageSpace.setLayout(new BoxLayout(messageSpace, BoxLayout.Y_AXIS));
 //        notificationTypeName = new JLabel("Currently editing: " + id);
 //        add(notificationTypeName);
-        add(messageLabel);
-        add(messageArea);
-        add(messageButton);
+        messageSpace.add(Box.createRigidArea(new Dimension(20,20)));
+        messageSpace.add(messageLabel);
+        messageSpace.add(Box.createRigidArea(new Dimension(0,10)));
+        messageSpace.add(messageArea);
+        messageSpace.add(Box.createRigidArea(new Dimension(0,30)));
+        messageSpace.add(messageButton);
+        messageSpace.add(Box.createRigidArea(new Dimension(20,20)));
         messageButton.addActionListener(e -> {
             String message = messageArea.getText();
             try {
@@ -46,7 +49,10 @@ public class NotificationTypeUpdateView extends JDialog{
             this.setVisible(false);
         });
 
+        this.add(messageSpace);
         this.pack();
+        this.setLocationByPlatform(true);
+        this.setVisible(true);
 
     }
 }

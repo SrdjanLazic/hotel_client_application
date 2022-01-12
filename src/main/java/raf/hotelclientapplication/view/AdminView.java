@@ -11,6 +11,7 @@ import raf.hotelclientapplication.restclient.dto.NotificationTypeListDto;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class AdminView extends JDialog{
@@ -54,13 +55,17 @@ public class AdminView extends JDialog{
         adminView = this;
         this.setTitle("ADMIN");
         this.setSize(800,600);
-        this.setLocationRelativeTo(null);
-        this.setLayout(new FlowLayout());
-        this.setVisible(true);
-//        clientTableModel = new ClientTableModel();
-//        clientTable = new JTable(clientTableModel);
+//        this.setLayout(new FlowLayout());
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+//        this.add(tabbedPane, BorderLayout.CENTER);
+
+        banUnbanPanel.setLayout(new BoxLayout(banUnbanPanel, BoxLayout.Y_AXIS));
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(banClientID);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(banClientButton);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         banClientButton.addActionListener(e -> {
             Long id = Long.parseLong(banClientID.getText());
             try {
@@ -71,7 +76,9 @@ public class AdminView extends JDialog{
             }
         });
         banUnbanPanel.add(unbanClientID);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(unbanClientButton);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         unbanClientButton.addActionListener(e -> {
             Long id = Long.parseLong(unbanClientID.getText());
             try {
@@ -82,7 +89,9 @@ public class AdminView extends JDialog{
             }
         });
         banUnbanPanel.add(banManagerID);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(banManagerButton);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         banManagerButton.addActionListener(e -> {
             Long id = Long.parseLong(banManagerID.getText());
             try {
@@ -93,7 +102,9 @@ public class AdminView extends JDialog{
             }
         });
         banUnbanPanel.add(unbanManagerID);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(unbanManagerButton);
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         unbanManagerButton.addActionListener(e -> {
             Long id = Long.parseLong(unbanManagerID.getText());
             try {
@@ -103,9 +114,14 @@ public class AdminView extends JDialog{
                 ioException.printStackTrace();
             }
         });
-        add(banUnbanPanel);
 
+        //TAB
+        tabbedPane.addTab("Ban/Unban", banUnbanPanel);
+        tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+        //
 
+        JPanel clientRankPanel = new JPanel();
+        clientRankPanel.setLayout(new BoxLayout(clientRankPanel, BoxLayout.Y_AXIS));
         clientRankTableModel = new ClientRankTableModel();
         clientRankTable = new JTable(clientRankTableModel);
 
@@ -114,8 +130,10 @@ public class AdminView extends JDialog{
             clientRankTableModel.addRow(new Object[]{clientRankDto.getName(), clientRankDto.getMinNumberOfReservations(), clientRankDto.getMaxNumberOfReservations(), clientRankDto.getDiscount()});
         });
         JScrollPane scrollPane = new JScrollPane(clientRankTable);
-        add(scrollPane);
-        add(editCLientRank);
+        clientRankPanel.add(scrollPane);
+        clientRankPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        clientRankPanel.add(editCLientRank);
+        clientRankPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         editCLientRank.addActionListener(e -> {
             String clientRankName = clientRankTableModel.getClientRankListDto().getContent().get(clientRankTable.getSelectedRow()).getName();
@@ -123,6 +141,13 @@ public class AdminView extends JDialog{
 
         });
 
+        //TAB
+        tabbedPane.addTab("Edit Rank", clientRankPanel);
+        tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+        //
+
+        JPanel notificationTypePanel = new JPanel();
+        notificationTypePanel.setLayout(new BoxLayout(notificationTypePanel, BoxLayout.Y_AXIS));
         notificationTypeTableModel = new NotificationTypeTableModel();
         notificationTypeTable = new JTable(notificationTypeTableModel);
 
@@ -132,9 +157,14 @@ public class AdminView extends JDialog{
         });
 
         JScrollPane scrollPaneNotificationTypes = new JScrollPane(notificationTypeTable);
-        add(scrollPaneNotificationTypes);
+        notificationTypePanel.add(scrollPaneNotificationTypes);
+        notificationTypePanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        JPanel splitNotificationType = new JPanel();
+        splitNotificationType.setLayout(new BoxLayout(splitNotificationType, BoxLayout.LINE_AXIS));
+        splitNotificationType.add(deleteNotificationTypeButton);
+        splitNotificationType.add(Box.createRigidArea(new Dimension(60, 0)));
 
-        add(deleteNotificationTypeButton);
+
 
         deleteNotificationTypeButton.addActionListener(e -> {
             Long id = notificationTypeTableModel.getNotificationTypeListDto().getContent().get(notificationTypeTable.getSelectedRow()).getId();
@@ -146,14 +176,22 @@ public class AdminView extends JDialog{
 
         });
 
-        add(updateNotificationTypeButton);
+        splitNotificationType.add(updateNotificationTypeButton);
+        notificationTypePanel.add(splitNotificationType);
+        notificationTypePanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         updateNotificationTypeButton.addActionListener( e -> {
             Long id = notificationTypeTableModel.getNotificationTypeListDto().getContent().get(notificationTypeTable.getSelectedRow()).getId();
             new NotificationTypeUpdateView(id, adminView);
         });
 
+        //TAB
+        tabbedPane.addTab("Notification Types", notificationTypePanel);
+        tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+        //
 
+        JPanel notificationPanel = new JPanel();
+        notificationPanel.setLayout(new BoxLayout(notificationPanel, BoxLayout.Y_AXIS));
         notificationTableModel = new NotificationTableModel();
         notificationTable = new JTable(notificationTableModel);
 
@@ -163,10 +201,13 @@ public class AdminView extends JDialog{
         });
 
         JScrollPane notificationsScrollPanel = new JScrollPane(notificationTable);
-        add(notificationsScrollPanel);
+        notificationPanel.add(notificationsScrollPanel);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        add(filterByEmailInput);
-        add(filterByEmailButton);
+        notificationPanel.add(filterByEmailInput);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        notificationPanel.add(filterByEmailButton);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         filterByEmailButton.addActionListener(e -> {
             String email = filterByEmailInput.getText();
             try {
@@ -181,8 +222,10 @@ public class AdminView extends JDialog{
             }
         });
 
-        add(filterByTypeInput);
-        add(filterByTypeButton);
+        notificationPanel.add(filterByTypeInput);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        notificationPanel.add(filterByTypeButton);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         filterByTypeButton.addActionListener(e -> {
             String type = filterByTypeInput.getText();
             try {
@@ -197,9 +240,18 @@ public class AdminView extends JDialog{
             }
         });
 
-        add(filterByDate1);
-        add(filterByDate2);
-        add(filterByDatesButton);
+        JPanel dates = new JPanel();
+        dates.setLayout(new BoxLayout(dates, BoxLayout.LINE_AXIS));
+        dates.add(Box.createRigidArea(new Dimension(5,0)));
+        dates.add(new JLabel(" Between "));
+        dates.add(filterByDate1);
+        dates.add(new JLabel(" and "));
+        dates.add(filterByDate2);
+        dates.add(Box.createRigidArea(new Dimension(5,0)));
+        notificationPanel.add(dates);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        notificationPanel.add(filterByDatesButton);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         filterByDatesButton.addActionListener(e -> {
             String date1 = filterByDate1.getText();
             String date2 = filterByDate2.getText();
@@ -215,7 +267,8 @@ public class AdminView extends JDialog{
             }
         });
 
-        add(resetFilterButton);
+        notificationPanel.add(resetFilterButton);
+        notificationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         resetFilterButton.addActionListener(e -> {
             notificationTableModel.setRowCount(0);
             notificationListDto.getContent().forEach(notificationDto -> {
@@ -223,14 +276,17 @@ public class AdminView extends JDialog{
             });
         });
 
+        //TAB
+        tabbedPane.addTab("Notifications", notificationPanel);
+        tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
+        //
 
+        this.add(tabbedPane, BorderLayout.CENTER);
         this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
 
 
-
-        // TODO:
-        //filter notifications between dates
-        //filter notification by type
     }
 
 }

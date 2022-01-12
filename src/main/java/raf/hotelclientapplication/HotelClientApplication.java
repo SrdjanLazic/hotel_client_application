@@ -22,8 +22,9 @@ public class HotelClientApplication extends JFrame {
         homeView = new HomeView();
         this.add(homeView, BorderLayout.CENTER);
         this.pack();
+//        this.setLocationRelativeTo(null);
+        this.setLocationByPlatform(true);
         this.setVisible(true);
-        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 

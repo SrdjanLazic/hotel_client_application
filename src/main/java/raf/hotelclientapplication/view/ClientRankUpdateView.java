@@ -5,6 +5,7 @@ import raf.hotelclientapplication.restclient.UserServiceRestClient;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class ClientRankUpdateView extends JDialog {
@@ -23,19 +24,32 @@ public class ClientRankUpdateView extends JDialog {
     public ClientRankUpdateView(String name, JDialog adminView){
         parentView = adminView;
         this.setTitle("Client rank update");
-        this.setSize(300,200);
-        this.setLocationRelativeTo(null);
-        this.setLayout(new FlowLayout());
-        this.setVisible(true);
+        this.setSize(600,400);
         clientRankName = new JLabel("Currently editing: " + name);
-        add(clientRankName);
-        add(minLabel);
-        add(minInput);
-        add(maxLabel);
-        add(maxInput);
-        add(discountLabel);
-        add(discountInput);
-        add(updateButton);
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(clientRankName);
+        mainPanel.add(Box.createRigidArea(new Dimension(30,30)));
+        JPanel inputs = new JPanel();
+        inputs.setLayout(new BoxLayout(inputs, BoxLayout.Y_AXIS));
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        inputs.add(minLabel);
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        inputs.add(minInput);
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        inputs.add(maxLabel);
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        inputs.add(maxInput);
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        inputs.add(discountLabel);
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        inputs.add(discountInput);
+        inputs.add(Box.createRigidArea(new Dimension(10,0)));
+        mainPanel.add(inputs);
+        mainPanel.add(Box.createRigidArea(new Dimension(0,15)));
+        mainPanel.add(updateButton);
+        mainPanel.add(Box.createRigidArea(new Dimension(30,10)));
+        this.add(mainPanel);
         updateButton.addActionListener(e -> {
             Double discount = Double.parseDouble(discountInput.getText());
             Integer min = Integer.parseInt(minInput.getText());
@@ -56,6 +70,8 @@ public class ClientRankUpdateView extends JDialog {
         });
 
         this.pack();
+        this.setLocationByPlatform(true);
+        this.setVisible(true);
 
     }
 
