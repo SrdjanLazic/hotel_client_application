@@ -52,7 +52,7 @@ public class ClientView extends JDialog {
             clientPasswordDto.setPassword(password);
             clientPasswordDto.setId(id);
             try {
-                userServiceRestClient.updatePassword(id, clientPasswordDto);
+                userServiceRestClient.updateClientPassword(id, clientPasswordDto);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

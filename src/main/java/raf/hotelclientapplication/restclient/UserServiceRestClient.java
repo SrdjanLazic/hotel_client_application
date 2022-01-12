@@ -247,7 +247,7 @@ public class UserServiceRestClient {
         throw new RuntimeException();
     }
 
-    public void updatePassword(Long id, ClientPasswordDto clientPasswordDto) throws IOException {
+    public void updateClientPassword(Long id, ClientPasswordDto clientPasswordDto) throws IOException {
 
         RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(clientPasswordDto));
 
@@ -266,6 +266,55 @@ public class UserServiceRestClient {
         }
         else
             throw new RuntimeException();
+    }
+
+    public void updateManagerPassword(Long id, ManagerPasswordDto managerPasswordDto) throws IOException {
+
+        RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(managerPasswordDto));
+        System.out.println("\nU updateManagerPassword u UserServiceRestClient");
+
+        Request request = new Request.Builder()
+                .url(URL + String.format("/manager/%d/update-password", id))
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .put(body)
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        System.out.println("\nResponse code " + response.code());
+        if (response.code() == 200) {
+            String json = response.body().string();
+        }
+        else
+            throw new RuntimeException();
+    }
+
+    public ManagerDto updateManagerProfile(Long id, ManagerUpdateDto managerUpdateDto) throws IOException {
+
+        RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(managerUpdateDto));
+
+        System.out.println(String.format("/manager/%d/update", id));
+        System.out.println(body);
+
+        Request request = new Request.Builder()
+                .url(URL + String.format("/manager/%d/update", id))
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .put(body)
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            //return objectMapper.readValue(json, ManagerDto.class);
+        }
+
+        throw new RuntimeException();
     }
 
 
