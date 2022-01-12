@@ -197,4 +197,32 @@ public class NotificationServiceRestClient {
         }
         throw new RuntimeException();
     }
+
+    public NotificationListDto getClientNotifications(Long id) throws IOException {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        JavaTimeModule module = new JavaTimeModule();
+        objectMapper.registerModule(module);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
+
+        Request request = new Request.Builder()
+                .url(URL + String.format("/notification/client/%d", id))
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+
+            return objectMapper.readValue(json, NotificationListDto.class);
+        }
+        throw new RuntimeException();
+    }
+
+
 }

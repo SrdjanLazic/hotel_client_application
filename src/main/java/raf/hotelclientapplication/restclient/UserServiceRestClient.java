@@ -222,6 +222,51 @@ public class UserServiceRestClient {
         }
 
         throw new RuntimeException();
-
     }
+
+    public ClientDto updateClientProfile(Long id, ClientUpdateDto clientUpdateDto) throws IOException {
+
+        RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(clientUpdateDto));
+
+        Request request = new Request.Builder()
+                .url(URL + String.format("/client/%d/update", id))
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .put(body)
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, ClientDto.class);
+        }
+
+        throw new RuntimeException();
+    }
+
+    public void updatePassword(Long id, ClientPasswordDto clientPasswordDto) throws IOException {
+
+        RequestBody body = RequestBody.create(JSON, objectMapper.writeValueAsString(clientPasswordDto));
+
+        Request request = new Request.Builder()
+                .url(URL + String.format("/client/%d/update-password", id))
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .put(body)
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+
+        if (response.code() == 200) {
+            String json = response.body().string();
+        }
+        else
+            throw new RuntimeException();
+    }
+
+
 }

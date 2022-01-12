@@ -80,11 +80,12 @@ public class HomeView extends JPanel {
                 String userAsJSON = new String(Base64.getDecoder().decode(token.split("\\.")[1]));
                 User user = objectMapper.readValue(userAsJSON, User.class);
                 HotelClientApplication.getInstance().setUser(user);
-                System.out.println(HotelClientApplication.getInstance().getUser());
                 HotelClientApplication.getInstance().setToken(token);
 
-                if(role.equals("admin")){
+                if(role.equalsIgnoreCase("admin")){
                     new AdminView();
+                } else if(role.equalsIgnoreCase("client")){
+                    new ClientView();
                 }
 
             } catch (IOException | IllegalAccessException | NoSuchMethodException ioException) {

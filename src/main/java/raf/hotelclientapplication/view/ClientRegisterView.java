@@ -57,7 +57,7 @@ public class ClientRegisterView extends JDialog {
 
 
     public ClientRegisterView() {
-        this.setTitle("Client Application");
+        this.setTitle("Client registration");
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
 
