@@ -1,13 +1,9 @@
 package raf.hotelclientapplication.view;
 
-import raf.hotelclientapplication.model.ClientRankTableModel;
-import raf.hotelclientapplication.model.NotificationTableModel;
-import raf.hotelclientapplication.model.NotificationTypeTableModel;
+import raf.hotelclientapplication.model.*;
 import raf.hotelclientapplication.restclient.NotificationServiceRestClient;
 import raf.hotelclientapplication.restclient.UserServiceRestClient;
-import raf.hotelclientapplication.restclient.dto.ClientRankListDto;
-import raf.hotelclientapplication.restclient.dto.NotificationListDto;
-import raf.hotelclientapplication.restclient.dto.NotificationTypeListDto;
+import raf.hotelclientapplication.restclient.dto.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +21,10 @@ public class AdminView extends JDialog{
     private ClientRankTableModel clientRankTableModel;
     private NotificationServiceRestClient notificationServiceRestClient = new NotificationServiceRestClient();
     private NotificationTypeTableModel notificationTypeTableModel;
+    private ClientTableModel clientTableModel;
+    private ManagerTableModel managerTableModel;
+    private JTable clientTable;
+    private JTable managerTable;
     private JTable clientRankTable;
     private JTable notificationTypeTable;
     private JTable notificationTable;
@@ -63,60 +63,137 @@ public class AdminView extends JDialog{
 
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-        banUnbanPanel.setLayout(new BoxLayout(banUnbanPanel, BoxLayout.Y_AXIS));
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        banUnbanPanel.add(banClientID);
+        clientTableModel = new ClientTableModel();
+        clientTable = new JTable(clientTableModel);
+        ClientListDto clientListDto = userServiceRestClient.getClients();
+        clientListDto.getContent().forEach(clientDto -> {
+            System.out.println(clientDto);
+            clientTableModel.addRow(new Object[]{clientDto.getEmail(), clientDto.isAccess(), clientDto.getId()});
+        });
+        JScrollPane clientTablePane = new JScrollPane();
+        clientTablePane.setViewportView(clientTable);
+        banUnbanPanel.add(clientTablePane);
         banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(banClientButton);
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         banClientButton.addActionListener(e -> {
-            Long id = Long.parseLong(banClientID.getText());
+            Long id = clientTableModel.getClientListDto().getContent().get(clientTable.getSelectedRow()).getId();
+            System.out.println(id);
             try {
                 userServiceRestClient.banClient(id);
-                banClientID.setText("");
+                clientTableModel.setRowCount(0);
+                userServiceRestClient.getClients().getContent().forEach(clientDto -> {
+                    clientTableModel.addRow(new Object[]{clientDto.getEmail(), clientDto.isAccess(), clientDto.getId()});
+                });
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         });
-        banUnbanPanel.add(unbanClientID);
         banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(unbanClientButton);
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         unbanClientButton.addActionListener(e -> {
-            Long id = Long.parseLong(unbanClientID.getText());
+            Long id = clientTableModel.getClientListDto().getContent().get(clientTable.getSelectedRow()).getId();
             try {
                 userServiceRestClient.unbanClient(id);
-                unbanClientID.setText("");
+                clientTableModel.setRowCount(0);
+                userServiceRestClient.getClients().getContent().forEach(clientDto -> {
+                    clientTableModel.addRow(new Object[]{clientDto.getEmail(), clientDto.isAccess(), clientDto.getId()});
+                });
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         });
-        banUnbanPanel.add(banManagerID);
+
+        managerTableModel = new ManagerTableModel();
+        managerTable = new JTable(managerTableModel);
+        ManagerListDto managerListDto = userServiceRestClient.getManagers();
+        managerListDto.getContent().forEach(managerDto -> {
+            managerTableModel.addRow(new Object[]{managerDto.getEmail(), managerDto.isAccess(), managerDto.getId()});
+        });
+        JScrollPane managerTablePane = new JScrollPane();
+        managerTablePane.setViewportView(managerTable);
+        banUnbanPanel.add(managerTablePane);
         banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(banManagerButton);
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         banManagerButton.addActionListener(e -> {
-            Long id = Long.parseLong(banManagerID.getText());
+            Long id = managerTableModel.getManagerListDto().getContent().get(managerTable.getSelectedRow()).getId();
             try {
                 userServiceRestClient.banManager(id);
-                banManagerID.setText("");
+                managerTableModel.setRowCount(0);
+                userServiceRestClient.getManagers().getContent().forEach(managerDto -> {
+                    managerTableModel.addRow(new Object[]{managerDto.getEmail(), managerDto.isAccess(), managerDto.getId()});
+                });
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         });
-        banUnbanPanel.add(unbanManagerID);
         banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         banUnbanPanel.add(unbanManagerButton);
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         unbanManagerButton.addActionListener(e -> {
-            Long id = Long.parseLong(unbanManagerID.getText());
+            Long id = managerTableModel.getManagerListDto().getContent().get(managerTable.getSelectedRow()).getId();
             try {
                 userServiceRestClient.unbanManager(id);
-                unbanManagerID.setText("");
+                managerTableModel.setRowCount(0);
+                userServiceRestClient.getManagers().getContent().forEach(managerDto -> {
+                    managerTableModel.addRow(new Object[]{managerDto.getEmail(), managerDto.isAccess(), managerDto.getId()});
+                });
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         });
+//        banUnbanPanel.setLayout(new BoxLayout(banUnbanPanel, BoxLayout.Y_AXIS));
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        banUnbanPanel.add(banClientID);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        banUnbanPanel.add(banClientButton);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        banClientButton.addActionListener(e -> {
+//            Long id = Long.parseLong(banClientID.getText());
+//            try {
+//                userServiceRestClient.banClient(id);
+//                banClientID.setText("");
+//            } catch (IOException ioException) {
+//                ioException.printStackTrace();
+//            }
+//        });
+//        banUnbanPanel.add(unbanClientID);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        banUnbanPanel.add(unbanClientButton);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        unbanClientButton.addActionListener(e -> {
+//            Long id = Long.parseLong(unbanClientID.getText());
+//            try {
+//                userServiceRestClient.unbanClient(id);
+//                unbanClientID.setText("");
+//            } catch (IOException ioException) {
+//                ioException.printStackTrace();
+//            }
+//        });
+//        banUnbanPanel.add(banManagerID);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        banUnbanPanel.add(banManagerButton);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+//        banManagerButton.addActionListener(e -> {
+//            Long id = Long.parseLong(banManagerID.getText());
+//            try {
+//                userServiceRestClient.banManager(id);
+//                banManagerID.setText("");
+//            } catch (IOException ioException) {
+//                ioException.printStackTrace();
+//            }
+//        });
+//        banUnbanPanel.add(unbanManagerID);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        banUnbanPanel.add(unbanManagerButton);
+//        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+//        unbanManagerButton.addActionListener(e -> {
+//            Long id = Long.parseLong(unbanManagerID.getText());
+//            try {
+//                userServiceRestClient.unbanManager(id);
+//                unbanManagerID.setText("");
+//            } catch (IOException ioException) {
+//                ioException.printStackTrace();
+//            }
+//        });
 
         //TAB
         tabbedPane.addTab("Ban/Unban", banUnbanPanel);

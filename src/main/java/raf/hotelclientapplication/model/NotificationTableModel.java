@@ -20,7 +20,6 @@ public class NotificationTableModel extends DefaultTableModel {
         super.addRow(rowData);
         NotificationDto notificationDto = new NotificationDto();
         notificationDto.setEmail(String.valueOf(rowData[0]));
-        System.out.println(rowData[1].getClass());
         notificationDto.setType((NotificationType) rowData[1]);
         notificationDto.setDateCreated((LocalDate) rowData[2]);
         notificationDto.setMessage(String.valueOf(rowData[3]));

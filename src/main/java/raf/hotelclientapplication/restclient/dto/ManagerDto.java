@@ -22,6 +22,7 @@ public class ManagerDto {
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthday;
     private String hotel;
+    private boolean access;
 
     public ManagerDto() {
     }
@@ -90,4 +91,11 @@ public class ManagerDto {
         this.hotel = hotel;
     }
 
+    public boolean isAccess() {
+        return access;
+    }
+
+    public void setAccess(boolean access) {
+        this.access = access;
+    }
 }

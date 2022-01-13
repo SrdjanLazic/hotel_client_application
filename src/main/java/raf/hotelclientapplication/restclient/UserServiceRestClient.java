@@ -317,5 +317,49 @@ public class UserServiceRestClient {
         throw new RuntimeException();
     }
 
+    public ClientListDto getClients() throws IOException {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        System.out.println(HotelClientApplication.getInstance().getToken());
+        Request request = new Request.Builder()
+                .url(URL + "/client")
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+        System.out.println(response.code());
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, ClientListDto.class);
+        }
+
+        throw new RuntimeException();
+    }
+
+    public ManagerListDto getManagers() throws IOException {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        System.out.println(HotelClientApplication.getInstance().getToken());
+        Request request = new Request.Builder()
+                .url(URL + "/manager")
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+        System.out.println(response.code());
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, ManagerListDto.class);
+        }
+
+        throw new RuntimeException();
+    }
+
 
 }
