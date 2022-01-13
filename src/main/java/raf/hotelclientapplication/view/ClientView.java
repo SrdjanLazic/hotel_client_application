@@ -26,18 +26,25 @@ public class ClientView extends JDialog {
 
     ClientView() throws IOException {
         this.setTitle("Client");
-        this.setVisible(true);
-        setLayout(new FlowLayout());
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         JPanel passwordPanel = new JPanel();
+//        passwordPanel.setLayout(new BoxLayout(passwordPanel, BoxLayout.Y_AXIS));
 
-        add(updateClientProfileButton);
+        mainPanel.add(updateClientProfileButton);
+        updateClientProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(Box.createRigidArea(new Dimension(0,30)));
         passwordPanel.add(emailLabel);
         passwordPanel.add(emailInput);
+        passwordPanel.add(Box.createRigidArea(new Dimension(0,20)));
         passwordPanel.add(updatePasswordLabel);
         passwordPanel.add(updatePasswordField);
+        passwordPanel.add(Box.createRigidArea(new Dimension(0,10)));
         passwordPanel.add(updatePasswordButton);
-        add(passwordPanel);
+        mainPanel.add(passwordPanel);
+        mainPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
         updateClientProfileButton.addActionListener(e -> {
             new ClientUpdateView();
@@ -58,6 +65,8 @@ public class ClientView extends JDialog {
             }
         });
 
+
+
         notificationTableModel = new NotificationTableModel();
         notificationTable = new JTable(notificationTableModel);
         NotificationListDto notificationListDto = notificationServiceRestClient.getClientNotifications(HotelClientApplication.getInstance().getUser().getId());
@@ -65,19 +74,23 @@ public class ClientView extends JDialog {
             notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
         });
         JScrollPane notificationTablePane = new JScrollPane();
-        notificationTablePane.add(notificationTable);
-        add(notificationTablePane);
+//        notificationTablePane.add(notificationTable);
+        notificationTablePane.setViewportView(notificationTable);
+        mainPanel.add(Box.createRigidArea(new Dimension(0,30)));
+        mainPanel.add(notificationTablePane);
+        mainPanel.add(Box.createRigidArea(new Dimension(0,10)));
 
 
-
-
+        mainPanel.setVisible(true);
+        this.add(mainPanel);
         this.pack();
+        this.setLocationByPlatform(true);
+        this.setVisible(true);
 
-        //update profile
-        //change password
+
+        //TODO:
         //get discount
-        //get all clients
-        //get all managers
-        //list all notifications
+        //profile information
+        //pregled svih njegovih podataka
     }
 }

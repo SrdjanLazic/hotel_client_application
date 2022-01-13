@@ -41,7 +41,7 @@ public class ManagerRegisterView extends JDialog {
     private JTextField lastNameInput = new JTextField(20);
     private JLabel usernameLabel = new JLabel("Username:");
     private JTextField usernameInput = new JTextField(20);
-    private JLabel passwordLabel = new JLabel("Password:");
+    private JLabel passwordLabel = new JLabel("Password: (min 8 chars)");
     private JPasswordField passwordInput = new JPasswordField(20);
     private JLabel phoneNumberLabel = new JLabel("Phone number:");
     private JTextField phoneNumberInput = new JTextField(20);

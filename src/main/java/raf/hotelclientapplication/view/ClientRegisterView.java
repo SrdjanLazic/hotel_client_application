@@ -36,8 +36,8 @@ public class ClientRegisterView extends JDialog {
     private JLabel lastNameLabel = new JLabel("Last name:");
     private JLabel passportNumberLabel = new JLabel("Passport number:");
     private JLabel usernameLabel = new JLabel("Username:");
-    private JLabel passwordLabel = new JLabel("Password");
-    private JLabel phoneNumberLabel = new JLabel("Phone number");
+    private JLabel passwordLabel = new JLabel("Password: (min 8 chars)");
+    private JLabel phoneNumberLabel = new JLabel("Phone number:");
     private JLabel dayLabel = new JLabel("Day");
     private JLabel monthLabel = new JLabel("Month");
     private JLabel yearLabel = new JLabel("Year");

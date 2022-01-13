@@ -28,18 +28,25 @@ public class ManagerView extends JDialog{
 
     ManagerView() throws IOException {
         this.setTitle("Manager");
-        this.setVisible(true);
-        setLayout(new FlowLayout());
+
+        JPanel main = new JPanel();
+        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+        main.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         JPanel passwordPanel = new JPanel();
 
-        add(updateManagerProfileButton);
+        main.add(updateManagerProfileButton);
+        updateManagerProfileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        main.add(Box.createRigidArea(new Dimension(0,30)));
         passwordPanel.add(emailLabel);
         passwordPanel.add(emailInput);
+        passwordPanel.add(Box.createRigidArea(new Dimension(0,20)));
         passwordPanel.add(updatePasswordLabel);
         passwordPanel.add(updatePasswordField);
         passwordPanel.add(updatePasswordButton);
-        add(passwordPanel);
+        passwordPanel.add(Box.createRigidArea(new Dimension(0,10)));
+        main.add(passwordPanel);
+        main.add(Box.createRigidArea(new Dimension(0,20)));
 
         updateManagerProfileButton.addActionListener(e -> {
             new ManagerUpdateView();
@@ -67,12 +74,21 @@ public class ManagerView extends JDialog{
             notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
         });
         JScrollPane notificationTablePane = new JScrollPane();
-        notificationTablePane.add(notificationTable);
-        add(notificationTablePane);
+        notificationTablePane.setViewportView(notificationTable);
+        main.add(Box.createRigidArea(new Dimension(0,30)));
+        main.add(notificationTablePane);
+        main.add(Box.createRigidArea(new Dimension(0,10)));
 
 
+        main.setVisible(true);
+        this.add(main);
         this.pack();
+        this.setLocationByPlatform(true);
+        this.setVisible(true);
     }
 
-
+    //TODO:
+    //get discount
+    //profile information
+    //pregled svih njegovih podataka
 }

@@ -55,10 +55,13 @@ public class AdminView extends JDialog{
         adminView = this;
         this.setTitle("ADMIN");
         this.setSize(800,600);
+
 //        this.setLayout(new FlowLayout());
 
         JTabbedPane tabbedPane = new JTabbedPane();
 //        this.add(tabbedPane, BorderLayout.CENTER);
+
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         banUnbanPanel.setLayout(new BoxLayout(banUnbanPanel, BoxLayout.Y_AXIS));
         banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -286,7 +289,13 @@ public class AdminView extends JDialog{
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
+        //TODO:
+        //ban unban select from clients/managers list
+        //get all users
+    }
 
+    public void repaintAdminView(){
+        adminView.repaint();
     }
 
 }
