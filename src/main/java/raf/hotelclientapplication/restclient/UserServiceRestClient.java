@@ -311,10 +311,11 @@ public class UserServiceRestClient {
         if (response.code() == 200) {
             String json = response.body().string();
 
-            //return objectMapper.readValue(json, ManagerDto.class);
-        }
+            return objectMapper.readValue(json, ManagerDto.class);
+        }else{
 
         throw new RuntimeException();
+        }
     }
 
     public ClientListDto getClients() throws IOException {
@@ -339,6 +340,48 @@ public class UserServiceRestClient {
         throw new RuntimeException();
     }
 
+    public ClientDto findById(Long id) throws IOException{
+        System.out.println(HotelClientApplication.getInstance().getToken());
+        Request request = new Request.Builder()
+                .url(URL + "/client/" +id)
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+        System.out.println(response.code());
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, ClientDto.class);
+        }
+
+        throw new RuntimeException();
+    }
+
+    public ManagerDto findManagerById(Long id) throws IOException{
+        System.out.println(HotelClientApplication.getInstance().getToken());
+        Request request = new Request.Builder()
+                .url(URL + "/manager/" +id)
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+        System.out.println(response.code());
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, ManagerDto.class);
+        }
+
+        throw new RuntimeException();
+    }
+
     public ManagerListDto getManagers() throws IOException {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         System.out.println(HotelClientApplication.getInstance().getToken());
@@ -356,6 +399,27 @@ public class UserServiceRestClient {
             String json = response.body().string();
 
             return objectMapper.readValue(json, ManagerListDto.class);
+        }
+
+        throw new RuntimeException();
+    }
+
+    public DiscountDto getDiscount(Long id) throws IOException{
+        System.out.println(HotelClientApplication.getInstance().getToken());
+        Request request = new Request.Builder()
+                .url(URL + String.format("/client/%d/discount", id))
+                .header("Authorization", "Bearer " + HotelClientApplication.getInstance().getToken())
+                .get()
+                .build();
+
+        Call call = client.newCall(request);
+
+        Response response = call.execute();
+        System.out.println(response.code());
+        if (response.code() == 200) {
+            String json = response.body().string();
+
+            return objectMapper.readValue(json, DiscountDto.class);
         }
 
         throw new RuntimeException();

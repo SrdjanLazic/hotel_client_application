@@ -21,6 +21,10 @@ public class ManagerDto {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthday;
+    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate employmentDate;
     private String hotel;
     private boolean access;
 
@@ -89,6 +93,14 @@ public class ManagerDto {
 
     public void setHotel(String hotel) {
         this.hotel = hotel;
+    }
+
+    public LocalDate getEmploymentDate() {
+        return employmentDate;
+    }
+
+    public void setEmploymentDate(LocalDate employmentDate) {
+        this.employmentDate = employmentDate;
     }
 
     public boolean isAccess() {

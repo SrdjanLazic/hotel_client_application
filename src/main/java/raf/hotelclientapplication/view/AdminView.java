@@ -63,6 +63,14 @@ public class AdminView extends JDialog{
 
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
+        //BANUNBAN TAB
+
+        banUnbanPanel.setLayout(new BoxLayout(banUnbanPanel, BoxLayout.X_AXIS));
+
+        JPanel clientSide = new JPanel();
+        clientSide.setLayout(new BoxLayout(clientSide, BoxLayout.Y_AXIS));
+
+
         clientTableModel = new ClientTableModel();
         clientTable = new JTable(clientTableModel);
         ClientListDto clientListDto = userServiceRestClient.getClients();
@@ -72,9 +80,9 @@ public class AdminView extends JDialog{
         });
         JScrollPane clientTablePane = new JScrollPane();
         clientTablePane.setViewportView(clientTable);
-        banUnbanPanel.add(clientTablePane);
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        banUnbanPanel.add(banClientButton);
+        clientSide.add(clientTablePane);
+        clientSide.add(Box.createRigidArea(new Dimension(0, 10)));
+        clientSide.add(banClientButton);
         banClientButton.addActionListener(e -> {
             Long id = clientTableModel.getClientListDto().getContent().get(clientTable.getSelectedRow()).getId();
             System.out.println(id);
@@ -88,8 +96,8 @@ public class AdminView extends JDialog{
                 ioException.printStackTrace();
             }
         });
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        banUnbanPanel.add(unbanClientButton);
+        clientSide.add(Box.createRigidArea(new Dimension(0, 10)));
+        clientSide.add(unbanClientButton);
         unbanClientButton.addActionListener(e -> {
             Long id = clientTableModel.getClientListDto().getContent().get(clientTable.getSelectedRow()).getId();
             try {
@@ -103,6 +111,11 @@ public class AdminView extends JDialog{
             }
         });
 
+        banUnbanPanel.add(clientSide);
+
+        JPanel managerSide = new JPanel();
+        managerSide.setLayout(new BoxLayout(managerSide, BoxLayout.Y_AXIS));
+
         managerTableModel = new ManagerTableModel();
         managerTable = new JTable(managerTableModel);
         ManagerListDto managerListDto = userServiceRestClient.getManagers();
@@ -111,9 +124,9 @@ public class AdminView extends JDialog{
         });
         JScrollPane managerTablePane = new JScrollPane();
         managerTablePane.setViewportView(managerTable);
-        banUnbanPanel.add(managerTablePane);
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        banUnbanPanel.add(banManagerButton);
+        managerSide.add(managerTablePane);
+        managerSide.add(Box.createRigidArea(new Dimension(0, 10)));
+        managerSide.add(banManagerButton);
         banManagerButton.addActionListener(e -> {
             Long id = managerTableModel.getManagerListDto().getContent().get(managerTable.getSelectedRow()).getId();
             try {
@@ -126,8 +139,8 @@ public class AdminView extends JDialog{
                 ioException.printStackTrace();
             }
         });
-        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        banUnbanPanel.add(unbanManagerButton);
+        managerSide.add(Box.createRigidArea(new Dimension(0, 10)));
+        managerSide.add(unbanManagerButton);
         unbanManagerButton.addActionListener(e -> {
             Long id = managerTableModel.getManagerListDto().getContent().get(managerTable.getSelectedRow()).getId();
             try {
@@ -140,6 +153,9 @@ public class AdminView extends JDialog{
                 ioException.printStackTrace();
             }
         });
+
+        banUnbanPanel.add(Box.createRigidArea(new Dimension(30,0)));
+        banUnbanPanel.add(managerSide);
 //        banUnbanPanel.setLayout(new BoxLayout(banUnbanPanel, BoxLayout.Y_AXIS));
 //        banUnbanPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 //        banUnbanPanel.add(banClientID);

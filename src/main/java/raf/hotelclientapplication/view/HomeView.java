@@ -86,8 +86,11 @@ public class HomeView extends JPanel {
                     new AdminView();
                 } else if(role.equalsIgnoreCase("client")){
                     new ClientView();
+                    System.out.println(user.getId());
+                    new ClientInfoView(user.getId());
                 } else if(role.equalsIgnoreCase("manager")){
                     new ManagerView();
+                    new ManagerInfoView(user.getId());
                 }
 
             } catch (IOException | IllegalAccessException | NoSuchMethodException ioException) {
