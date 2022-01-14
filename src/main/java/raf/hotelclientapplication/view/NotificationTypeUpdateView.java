@@ -14,14 +14,15 @@ public class NotificationTypeUpdateView extends JDialog{
     private JTextField messageArea = new JTextField(10);
     private JButton messageButton = new JButton("Update");
     private NotificationServiceRestClient notificationServiceRestClient = new NotificationServiceRestClient();
-    private JDialog parentView;
+    private AdminView parentView;
 
 
-    public NotificationTypeUpdateView(Long id, JDialog adminView) {
-        parentView = adminView;
+    public NotificationTypeUpdateView(Long id, AdminView adminView) {
+        this.parentView = adminView;
         this.setTitle("Client rank update");
         this.setSize(400,200);
         JPanel messageSpace = new JPanel();
+        messageSpace.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         messageSpace.setLayout(new BoxLayout(messageSpace, BoxLayout.Y_AXIS));
 //        notificationTypeName = new JLabel("Currently editing: " + id);
 //        add(notificationTypeName);
@@ -36,15 +37,10 @@ public class NotificationTypeUpdateView extends JDialog{
             String message = messageArea.getText();
             try {
                 notificationServiceRestClient.updateNotificationType(message, id);
-                parentView.setVisible(false);
-                new AdminView();
+                adminView.updateNotificationTypeTable();
 
             } catch (IOException ioException) {
                 ioException.printStackTrace();
-            } catch (NoSuchMethodException noSuchMethodException) {
-                noSuchMethodException.printStackTrace();
-            } catch (IllegalAccessException illegalAccessException) {
-                illegalAccessException.printStackTrace();
             }
             this.setVisible(false);
         });
@@ -53,6 +49,7 @@ public class NotificationTypeUpdateView extends JDialog{
         this.pack();
         this.setLocationByPlatform(true);
         this.setVisible(true);
+        this.setLocationRelativeTo(null);
 
     }
 }

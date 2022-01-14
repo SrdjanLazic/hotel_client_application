@@ -233,7 +233,7 @@ public class AdminView extends JDialog{
 
         editCLientRank.addActionListener(e -> {
             String clientRankName = clientRankTableModel.getClientRankListDto().getContent().get(clientRankTable.getSelectedRow()).getName();
-            new ClientRankUpdateView(clientRankName, adminView);
+            new ClientRankUpdateView(clientRankName, this);
 
         });
 
@@ -266,6 +266,11 @@ public class AdminView extends JDialog{
             Long id = notificationTypeTableModel.getNotificationTypeListDto().getContent().get(notificationTypeTable.getSelectedRow()).getId();
             try {
                 notificationServiceRestClient.deleteNotificationType(id);
+                notificationTypeTableModel.setRowCount(0);
+                notificationServiceRestClient.getAllNotificationTypes().getContent().forEach(notificationTypeDto -> {
+                    notificationTypeTableModel.addRow(new Object[]{notificationTypeDto.getType(), notificationTypeDto.getMessage(), notificationTypeDto.getId()});
+                });
+
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -278,7 +283,7 @@ public class AdminView extends JDialog{
 
         updateNotificationTypeButton.addActionListener( e -> {
             Long id = notificationTypeTableModel.getNotificationTypeListDto().getContent().get(notificationTypeTable.getSelectedRow()).getId();
-            new NotificationTypeUpdateView(id, adminView);
+            new NotificationTypeUpdateView(id, this);
         });
 
         //TAB
@@ -306,6 +311,7 @@ public class AdminView extends JDialog{
         notificationPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         filterByEmailButton.addActionListener(e -> {
             String email = filterByEmailInput.getText();
+            filterByEmailInput.setText("");
             try {
                 NotificationListDto filteredNotifications = notificationServiceRestClient.getNotificationsByEmail(email);
                 notificationTableModel.setRowCount(0);
@@ -324,6 +330,7 @@ public class AdminView extends JDialog{
         notificationPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         filterByTypeButton.addActionListener(e -> {
             String type = filterByTypeInput.getText();
+            filterByTypeInput.setText("");
             try {
                 NotificationListDto filteredNotifications = notificationServiceRestClient.getNotificationsByType(type);
                 notificationTableModel.setRowCount(0);
@@ -351,6 +358,8 @@ public class AdminView extends JDialog{
         filterByDatesButton.addActionListener(e -> {
             String date1 = filterByDate1.getText();
             String date2 = filterByDate2.getText();
+            filterByDate1.setText("");
+            filterByDate2.setText("");
             try {
                 NotificationListDto filteredNotifications = notificationServiceRestClient.getNotificationsByDate(date1, date2);
                 notificationTableModel.setRowCount(0);
@@ -366,6 +375,10 @@ public class AdminView extends JDialog{
         notificationPanel.add(resetFilterButton);
         notificationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         resetFilterButton.addActionListener(e -> {
+            filterByTypeInput.setText("");
+            filterByDate1.setText("");
+            filterByDate2.setText("");
+            filterByEmailInput.setText("");
             notificationTableModel.setRowCount(0);
             notificationListDto.getContent().forEach(notificationDto -> {
                 notificationTableModel.addRow(new Object[]{notificationDto.getEmail(), notificationDto.getType(), notificationDto.getDateCreated(), notificationDto.getMessage()});
@@ -387,8 +400,20 @@ public class AdminView extends JDialog{
         //get all users
     }
 
-    public void repaintAdminView(){
-        adminView.repaint();
+    public void updateRankTable() throws IOException {
+        clientRankTableModel.setRowCount(0);
+        ClientRankListDto clientRankListDto = userServiceRestClient.getClientRanks();
+        clientRankListDto.getContent().forEach(clientRankDto -> {
+            clientRankTableModel.addRow(new Object[]{clientRankDto.getName(), clientRankDto.getMinNumberOfReservations(), clientRankDto.getMaxNumberOfReservations(), clientRankDto.getDiscount()});
+        });
+    }
+
+    public void updateNotificationTypeTable() throws IOException {
+        notificationTypeTableModel.setRowCount(0);
+        NotificationTypeListDto notificationTypeListDto = notificationServiceRestClient.getAllNotificationTypes();
+        notificationTypeListDto.getContent().forEach(notificationTypeDto -> {
+            notificationTypeTableModel.addRow(new Object[]{notificationTypeDto.getType(), notificationTypeDto.getMessage(), notificationTypeDto.getId()});
+        });
     }
 
 }

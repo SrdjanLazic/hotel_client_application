@@ -19,14 +19,15 @@ public class ClientRankUpdateView extends JDialog {
     private JTextField discountInput = new JTextField(3);
     private JButton updateButton = new JButton("Update");
     private UserServiceRestClient userServiceRestClient = new UserServiceRestClient();
-    private JDialog parentView;
+    private AdminView parentView;
 
-    public ClientRankUpdateView(String name, JDialog adminView){
+    public ClientRankUpdateView(String name, AdminView adminView){
         parentView = adminView;
         this.setTitle("Client rank update");
-        this.setSize(600,400);
+        this.setSize(800,600);
         clientRankName = new JLabel("Currently editing: " + name);
         JPanel mainPanel = new JPanel();
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.add(clientRankName);
         mainPanel.add(Box.createRigidArea(new Dimension(30,30)));
@@ -56,15 +57,10 @@ public class ClientRankUpdateView extends JDialog {
             Integer max = Integer.parseInt(maxInput.getText());
             try {
                 userServiceRestClient.updateClientRank(min, max, discount, name);
-                //TODO: Refersh tabele
-                new AdminView();
+                adminView.updateRankTable();
 
             } catch (IOException ioException) {
                 ioException.printStackTrace();
-            } catch (NoSuchMethodException noSuchMethodException) {
-                noSuchMethodException.printStackTrace();
-            } catch (IllegalAccessException illegalAccessException) {
-                illegalAccessException.printStackTrace();
             }
             this.setVisible(false);
         });
@@ -72,6 +68,7 @@ public class ClientRankUpdateView extends JDialog {
         this.pack();
         this.setLocationByPlatform(true);
         this.setVisible(true);
+        this.setLocationRelativeTo(null);
 
     }
 
