@@ -58,10 +58,19 @@ public class ClientView extends JDialog {
             clientPasswordDto.setEmail(email);
             clientPasswordDto.setPassword(password);
             clientPasswordDto.setId(id);
+            emailInput.setText("");
+            updatePasswordField.setText("");
+            JOptionPane.showMessageDialog(this,
+                    "To confirm your password change please check your email.",
+                    "Password change",
+                    JOptionPane.INFORMATION_MESSAGE);
             try {
                 userServiceRestClient.updateClientPassword(id, clientPasswordDto);
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Could not change password please try again.",
+                        "Error changing password",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 

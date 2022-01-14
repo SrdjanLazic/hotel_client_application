@@ -27,8 +27,6 @@ public class ClientUpdateView extends JDialog {
 
     public ClientUpdateView(){
         this.setTitle("Client update");
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
 
         JPanel updatePanel = new JPanel();
         updatePanel.setLayout(new BoxLayout(updatePanel, BoxLayout.Y_AXIS));
@@ -59,6 +57,7 @@ public class ClientUpdateView extends JDialog {
             clientUpdateDto.setPassportNumber(passportNumberInput.getText());
             try {
                 userServiceRestClient.updateClientProfile(HotelClientApplication.getInstance().getUser().getId(), clientUpdateDto);
+                this.setVisible(false);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -67,6 +66,8 @@ public class ClientUpdateView extends JDialog {
 
         add(updatePanel);
         this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
 

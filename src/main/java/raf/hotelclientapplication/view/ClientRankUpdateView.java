@@ -70,7 +70,7 @@ public class ClientRankUpdateView extends JDialog {
         });
 
         this.pack();
-        this.setLocationByPlatform(true);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
 
     }

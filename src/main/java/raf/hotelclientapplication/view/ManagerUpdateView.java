@@ -30,8 +30,6 @@ public class ManagerUpdateView  extends JDialog{
 
     public ManagerUpdateView(){
         this.setTitle("Client update");
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
 
         JPanel updatePanel = new JPanel();
         updatePanel.setLayout(new BoxLayout(updatePanel, BoxLayout.Y_AXIS));
@@ -66,6 +64,7 @@ public class ManagerUpdateView  extends JDialog{
             managerUpdateDto.setHotel(hotelInput.getText());
             try {
                 userServiceRestClient.updateManagerProfile(HotelClientApplication.getInstance().getUser().getId(), managerUpdateDto);
+                this.setVisible(false);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -74,5 +73,7 @@ public class ManagerUpdateView  extends JDialog{
 
         add(updatePanel);
         this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 }

@@ -60,10 +60,19 @@ public class ManagerView extends JDialog{
             managerPasswordDto.setEmail(email);
             managerPasswordDto.setPassword(password);
             managerPasswordDto.setId(id);
+            emailInput.setText("");
+            updatePasswordField.setText("");
+            JOptionPane.showMessageDialog(this,
+                    "To confirm your password change please check your email.",
+                    "Password change",
+                    JOptionPane.INFORMATION_MESSAGE);
             try {
                 userServiceRestClient.updateManagerPassword(id, managerPasswordDto);
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Could not change password please try again.",
+                        "Error changing password",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 
