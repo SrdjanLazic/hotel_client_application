@@ -1,8 +1,6 @@
 package raf.hotelclientapplication.view;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import raf.hotelclientapplication.restclient.UserServiceRestClient;
-import raf.hotelclientapplication.restclient.dto.ClientDto;
 import raf.hotelclientapplication.restclient.dto.ManagerDto;
 
 import javax.swing.*;
@@ -11,8 +9,8 @@ import java.io.IOException;
 
 public class ManagerInfoView extends JDialog {
 
-    private JLabel emailLabel = new JLabel("Email:");
-    private JLabel emailInput = new JLabel();
+    private JLabel emailInfoLabel = new JLabel("Email:");
+    private JLabel emailInfoInput = new JLabel();
     private JLabel firstNameLabel = new JLabel("First name:");
     private JLabel firstNameInput = new JLabel();
     private JLabel lastNameLabel = new JLabel("Last name:");
@@ -36,7 +34,6 @@ public class ManagerInfoView extends JDialog {
     private JLabel hotelLabel = new JLabel("Hotel:");
     private JLabel hotelInput = new JLabel();
     private UserServiceRestClient userServiceRestClient = new UserServiceRestClient();
-    private ObjectMapper objectMapper = new ObjectMapper();
 
 
     public ManagerInfoView(Long id) throws IOException {
@@ -50,7 +47,7 @@ public class ManagerInfoView extends JDialog {
         ManagerDto currentManagerDto = userServiceRestClient.findManagerById(id);
         firstNameInput.setText(currentManagerDto.getFirstName());
         lastNameInput.setText(currentManagerDto.getLastName());
-        emailInput.setText(currentManagerDto.getEmail());
+        emailInfoInput.setText(currentManagerDto.getEmail());
         usernameInput.setText(currentManagerDto.getUsername());
         phoneNumberInput.setText(currentManagerDto.getPhoneNumber());
         JLabel birthday = new JLabel("Birthday:");
@@ -76,11 +73,11 @@ public class ManagerInfoView extends JDialog {
         lastNameInput.setBackground(Color.WHITE);
         registerPanel.add(lastNameInput);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        registerPanel.add(emailLabel);
+        registerPanel.add(emailInfoLabel);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        emailInput.setOpaque(true);
-        emailInput.setBackground(Color.WHITE);
-        registerPanel.add(emailInput);
+        emailInfoInput.setOpaque(true);
+        emailInfoInput.setBackground(Color.WHITE);
+        registerPanel.add(emailInfoInput);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         registerPanel.add(usernameLabel);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
