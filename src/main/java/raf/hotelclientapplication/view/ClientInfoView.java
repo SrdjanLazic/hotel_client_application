@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 public class ClientInfoView extends JDialog {
 
-    private JLabel emailLabel = new JLabel("Email:");
+    private JLabel emailInfoLabel = new JLabel("Email:");
     private JLabel firstNameLabel = new JLabel("First name:");
     private JLabel lastNameLabel = new JLabel("Last name:");
     private JLabel passportNumberLabel = new JLabel("Passport number:");
@@ -24,7 +24,7 @@ public class ClientInfoView extends JDialog {
     private JLabel monthLabel = new JLabel("Month");
     private JLabel yearLabel = new JLabel("Year");
     private JLabel usernameInput = new JLabel();
-    private JLabel emailInput = new JLabel();
+    private JLabel emailInfoInput = new JLabel();
     private JLabel firstNameInput = new JLabel();
     private JLabel lastNameInput = new JLabel();
     private JLabel passwordInput = new JLabel();
@@ -48,7 +48,7 @@ public class ClientInfoView extends JDialog {
         ClientDto currentClientDto = userServiceRestClient.findById(id);
         firstNameInput.setText(currentClientDto.getFirstName());
         lastNameInput.setText(currentClientDto.getLastName());
-        emailInput.setText(currentClientDto.getEmail());
+        emailInfoInput.setText(currentClientDto.getEmail());
         usernameInput.setText(currentClientDto.getUsername());
         passportInput.setText(currentClientDto.getPassportNumber());
         phoneNumberInput.setText(currentClientDto.getPhoneNumber());
@@ -72,11 +72,11 @@ public class ClientInfoView extends JDialog {
         lastNameInput.setBackground(Color.WHITE);
         registerPanel.add(lastNameInput);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        registerPanel.add(emailLabel);
+        registerPanel.add(emailInfoLabel);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-        emailInput.setOpaque(true);
-        emailInput.setBackground(Color.WHITE);
-        registerPanel.add(emailInput);
+        emailInfoInput.setOpaque(true);
+        emailInfoInput.setBackground(Color.WHITE);
+        registerPanel.add(emailInfoInput);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         registerPanel.add(usernameLabel);
         registerPanel.add(Box.createRigidArea(new Dimension(0, 5)));
