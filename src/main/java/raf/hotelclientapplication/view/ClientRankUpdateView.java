@@ -56,6 +56,7 @@ public class ClientRankUpdateView extends JDialog {
             Integer max = Integer.parseInt(maxInput.getText());
             try {
                 userServiceRestClient.updateClientRank(min, max, discount, name);
+                //TODO: Refersh tabele
                 new AdminView();
 
             } catch (IOException ioException) {
