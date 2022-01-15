@@ -24,10 +24,11 @@ public class ClientUpdateView extends JDialog {
     private JTextField phoneNumberInput = new JTextField(15);
     private JTextField passportNumberInput = new JTextField(15);
     private JButton save = new JButton("Save");
+    private ClientView clientView;
 
-    public ClientUpdateView(){
+    public ClientUpdateView(ClientView clientView){
         this.setTitle("Client update");
-
+        this.clientView = clientView;
         JPanel updatePanel = new JPanel();
         updatePanel.setLayout(new BoxLayout(updatePanel, BoxLayout.Y_AXIS));
         updatePanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
@@ -58,6 +59,8 @@ public class ClientUpdateView extends JDialog {
             try {
                 userServiceRestClient.updateClientProfile(HotelClientApplication.getInstance().getUser().getId(), clientUpdateDto);
                 this.setVisible(false);
+                clientView.updateClientInfo();
+
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class UserServiceRestClient {
 
-    public static final String URL = "http://localhost:8080/api";
+    public static final String URL = "http://localhost:8084/hotel-user-service";
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");

@@ -27,10 +27,11 @@ public class ManagerUpdateView  extends JDialog{
     private JTextField passportNumberInput = new JTextField(15);
     private JTextField hotelInput = new JTextField(15);
     private JButton save = new JButton("Save");
+    private ManagerView managerView;
 
-    public ManagerUpdateView(){
+    public ManagerUpdateView(ManagerView managerView){
         this.setTitle("Client update");
-
+        this.managerView = managerView;
         JPanel updatePanel = new JPanel();
         updatePanel.setLayout(new BoxLayout(updatePanel, BoxLayout.Y_AXIS));
         updatePanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
@@ -65,6 +66,7 @@ public class ManagerUpdateView  extends JDialog{
             try {
                 userServiceRestClient.updateManagerProfile(HotelClientApplication.getInstance().getUser().getId(), managerUpdateDto);
                 this.setVisible(false);
+                managerView.updateManagerView();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

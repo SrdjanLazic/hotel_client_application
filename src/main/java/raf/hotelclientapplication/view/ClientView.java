@@ -46,6 +46,7 @@ public class ClientView extends JDialog {
     private JLabel dayInput = new JLabel();
     private JLabel monthInput = new JLabel();
     private JLabel yearInput = new JLabel();
+    JLabel birthdayInput = new JLabel();
 
     ClientView() throws IOException {
         this.setTitle("Client");
@@ -73,7 +74,7 @@ public class ClientView extends JDialog {
         mainPanel.add(Box.createRigidArea(new Dimension(0,20)));
 
         updateClientProfileButton.addActionListener(e -> {
-            new ClientUpdateView();
+            new ClientUpdateView(this);
         });
 
         updatePasswordButton.addActionListener(e -> {
@@ -120,7 +121,6 @@ public class ClientView extends JDialog {
 
         //INFO VIEW
 
-        JPanel infoView = new JPanel();
         JPanel registerPanel = new JPanel();
         registerPanel.setLayout(new BoxLayout(registerPanel, BoxLayout.Y_AXIS));
         registerPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
@@ -134,7 +134,6 @@ public class ClientView extends JDialog {
         passportInput.setText(currentClientDto.getPassportNumber());
         phoneNumberInput.setText(currentClientDto.getPhoneNumber());
         JLabel birthday = new JLabel("Birthday:");
-        JLabel birthdayInput = new JLabel();
         birthdayInput.setText(String.valueOf(currentClientDto.getBirthday()));
         JLabel reservations = new JLabel("Number of Reservations:");
         JLabel reservationsInput = new JLabel();
@@ -211,5 +210,18 @@ public class ClientView extends JDialog {
         this.setLocationByPlatform(true);
         this.setVisible(true);
 
+    }
+
+    public void updateClientInfo() throws IOException {
+        Long id = HotelClientApplication.getInstance().getUser().getId();
+        ClientDto clientDto = userServiceRestClient.findById(id);
+
+        firstNameInput.setText(clientDto.getFirstName());
+        lastNameInput.setText(clientDto.getLastName());
+        emailInfoInput.setText(clientDto.getEmail());
+        usernameInput.setText(clientDto.getUsername());
+        passportInput.setText(clientDto.getPassportNumber());
+        phoneNumberInput.setText(clientDto.getPhoneNumber());
+        birthdayInput.setText(String.valueOf(clientDto.getBirthday()));
     }
 }

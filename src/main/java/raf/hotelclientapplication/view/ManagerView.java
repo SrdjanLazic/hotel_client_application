@@ -4,10 +4,7 @@ import raf.hotelclientapplication.HotelClientApplication;
 import raf.hotelclientapplication.model.NotificationTableModel;
 import raf.hotelclientapplication.restclient.NotificationServiceRestClient;
 import raf.hotelclientapplication.restclient.UserServiceRestClient;
-import raf.hotelclientapplication.restclient.dto.ClientPasswordDto;
-import raf.hotelclientapplication.restclient.dto.ManagerDto;
-import raf.hotelclientapplication.restclient.dto.ManagerPasswordDto;
-import raf.hotelclientapplication.restclient.dto.NotificationListDto;
+import raf.hotelclientapplication.restclient.dto.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,6 +48,8 @@ public class ManagerView extends JDialog{
     private JLabel employmentYearLabel = new JLabel("Employment Year");
     private JLabel employmentYearInput = new JLabel();
     private JLabel hotelLabel = new JLabel("Hotel:");
+    private JLabel birthdayInput = new JLabel();
+    private JLabel employmentInput = new JLabel();
     private JLabel hotelInput = new JLabel();
 
     ManagerView() throws IOException {
@@ -78,7 +77,7 @@ public class ManagerView extends JDialog{
         main.add(Box.createRigidArea(new Dimension(0,20)));
 
         updateManagerProfileButton.addActionListener(e -> {
-            new ManagerUpdateView();
+            new ManagerUpdateView(this);
         });
 
         updatePasswordButton.addActionListener(e -> {
@@ -130,13 +129,10 @@ public class ManagerView extends JDialog{
         usernameInput.setText(currentManagerDto.getUsername());
         phoneNumberInput.setText(currentManagerDto.getPhoneNumber());
         JLabel birthday = new JLabel("Birthday:");
-        JLabel birthdayInput = new JLabel();
         birthdayInput.setText(String.valueOf(currentManagerDto.getBirthday()));
         JLabel employment = new JLabel("Employment:");
-        JLabel employmentInput = new JLabel();
         employmentInput.setText(String.valueOf(currentManagerDto.getEmploymentDate()));
         JLabel hotel = new JLabel("Hotel:");
-        JLabel hotelInput = new JLabel();
         hotelInput.setText(String.valueOf(currentManagerDto.getHotel()));
 
         registerPanel.add(Box.createRigidArea(new Dimension(0, 30)));
@@ -201,6 +197,20 @@ public class ManagerView extends JDialog{
         this.pack();
         this.setLocationByPlatform(true);
         this.setVisible(true);
+    }
+
+    public void updateManagerView() throws IOException {
+        Long id = HotelClientApplication.getInstance().getUser().getId();
+        ManagerDto managerDto = userServiceRestClient.findManagerById(id);
+
+        firstNameInput.setText(managerDto.getFirstName());
+        lastNameInput.setText(managerDto.getLastName());
+        emailInfoInput.setText(managerDto.getEmail());
+        usernameInput.setText(managerDto.getUsername());
+        phoneNumberInput.setText(managerDto.getPhoneNumber());
+        birthdayInput.setText(String.valueOf(managerDto.getBirthday()));
+        employmentInput.setText(String.valueOf(managerDto.getEmploymentDate()));
+        hotelInput.setText(managerDto.getHotel());
     }
 
 }
